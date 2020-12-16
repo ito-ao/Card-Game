@@ -21,4 +21,10 @@ public class CardMovement : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
         transform.SetParent(defaultParent,false);
         GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
+
+    public void SetCardTransform(Transform parentTransdorm)
+    {
+        defaultParent = parentTransdorm;
+        transform.SetParent(defaultParent);
+    }
 }

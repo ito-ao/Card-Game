@@ -6,7 +6,9 @@ public class GameManager : MonoBehaviour
 {
     // 手札にカード生成
     [SerializeField] Transform playerHandTransform,
-    enemyHandTransform;
+                               playerFieldTransform,
+                               enemyHandTransform,
+                               enemyFieldTransform;
     [SerializeField] CardController cardPrefad;
 
     bool isPlayerTurn;
@@ -63,7 +65,40 @@ public class GameManager : MonoBehaviour
     void EnemyTurn()
     {
         Debug.Log("enemyのターン");
+        //場にカードを出す
+        //手札のカードリストを取得
+        CardController[] handCardList = enemyHandTransform.GetComponentsInChildren<CardController>();
+        //場に出すカードの選択
+        CardController enemyCard = handCardList[0];
+        //カードの移動
+        enemyCard.movement.SetCardTransform(enemyFieldTransform);
+        //攻撃
+        //フィールドのカードリストを取得
+        CardController[] fieldCardList = enemyFieldTransform.GetComponentsInChildren<CardController>();
+        //アタッカーを選択
+        CardController attacker = fieldCardList[0];
+        //ブロッカーを選択
+        CardController[] playerFieldCardList = playerFieldTransform.GetComponentsInChildren<CardController>();
+        CardController defender = playerFieldCardList[0];
+        //戦闘
+        CardsBattle(attacker,defender);
+
+        //ダメージ計算
+
         ChangeTurn();
+    }
+
+    void CardsBattle(CardController attacker, CardController defender)
+    {
+        Debug.Log("CardsBattle");
+        Debug.Log("Attacker hp"+attacker.model.hp);
+        Debug.Log("defender hp"+defender.model.hp);
+        attacker.model.Attack(defender);
+        defender.model.Attack(attacker);
+        Debug.Log("Attacker hp"+attacker.model.hp);
+        Debug.Log("defender hp"+defender.model.hp);
+        attacker.CheckAlive();
+        defender.CheckAlive();
     }
 
 
